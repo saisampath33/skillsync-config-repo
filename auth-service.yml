@@ -1,0 +1,4 @@
+# Staging individual service configs for GitHub push
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/skillsync_auth?createDatabaseIfNotExist=true&useSSL=false

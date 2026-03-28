@@ -1,0 +1,4 @@
+spring:
+  # Notification service specific settings
+  application:
+    name: notification-service
