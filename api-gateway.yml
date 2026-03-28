@@ -1,0 +1,4 @@
+# API Gateway specific settings
+spring:
+  application:
+    name: api-gateway
