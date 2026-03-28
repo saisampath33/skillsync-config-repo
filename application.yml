@@ -1,0 +1,78 @@
+spring:
+  # Database Configuration - Using dynamic database naming based on service name
+  datasource:
+    url: jdbc:mysql://localhost:3306/skillsync_${spring.application.name}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+  # Messaging - RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  # Caching - Redis
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000
+
+# Service Discovery - Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Monitoring & Tracing - Actuator & Zipkin
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,bus-refresh,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Security - Shared JWT Configuration
+jwt:
+  secret: SkillSyncSecretKey2026XyzAbc123SuperSecure!@#
+  expiration: 86400000 
+  refresh-expiration: 604800000
+
+# Documentation - Swagger/Springdoc
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# Logging Details
+logging:
+  level:
+    root: INFO
+    com.skillsync: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.web: INFO
+    org.springframework.cloud: INFO
