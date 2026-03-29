@@ -11,6 +11,7 @@ spring:
             allowedOrigins: "*"
             allowedMethods: "*"
             allowedHeaders: "*"
+            allowCredentials: false
       routes:
         - id: auth-service
           uri: lb://auth-service
@@ -40,6 +41,25 @@ spring:
           uri: lb://review-service
           predicates:
             - Path=/reviews/**
+
+# Swagger Aggregation using Discovery Locator paths
+springdoc:
+  swagger-ui:
+    urls:
+      - name: 🔐 AUTH-SERVICE
+        url: /auth-service/v3/api-docs
+      - name: 👤 USER-SERVICE
+        url: /user-service/v3/api-docs
+      - name: 👨‍🏫 MENTOR-SERVICE
+        url: /mentor-service/v3/api-docs
+      - name: 🛠️ SKILL-SERVICE
+        url: /skill-service/v3/api-docs
+      - name: 📅 SESSION-SERVICE
+        url: /session-service/v3/api-docs
+      - name: 👥 GROUP-SERVICE
+        url: /group-service/v3/api-docs
+      - name: 🌟 REVIEW-SERVICE
+        url: /review-service/v3/api-docs
 
 eureka:
   client:
