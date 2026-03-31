@@ -17,54 +17,111 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: auth-service
+                fallbackUri: forward:/fallback
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: user-service
+                fallbackUri: forward:/fallback
         - id: mentor-service
           uri: lb://mentor-service
           predicates:
             - Path=/mentors/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: mentor-service
+                fallbackUri: forward:/fallback
         - id: skill-service
           uri: lb://skill-service
           predicates:
             - Path=/skills/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: skill-service
+                fallbackUri: forward:/fallback
         - id: session-service
           uri: lb://session-service
           predicates:
             - Path=/sessions/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: session-service
+                fallbackUri: forward:/fallback
         - id: group-service
           uri: lb://group-service
           predicates:
             - Path=/groups/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: group-service
+                fallbackUri: forward:/fallback
         - id: review-service
           uri: lb://review-service
           predicates:
             - Path=/reviews/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: review-service
+                fallbackUri: forward:/fallback
 
-# Swagger Aggregation using Discovery Locator paths
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+    instances:
+      auth-service:
+        baseConfig: default
+      user-service:
+        baseConfig: default
+      mentor-service:
+        baseConfig: default
+      skill-service:
+        baseConfig: default
+      session-service:
+        baseConfig: default
+      group-service:
+        baseConfig: default
+      review-service:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 3s
+
 springdoc:
   swagger-ui:
     urls:
-      - name: 🔐 AUTH-SERVICE
+      - name: AUTH-SERVICE
         url: /auth-service/v3/api-docs
-      - name: 👤 USER-SERVICE
+      - name: USER-SERVICE
         url: /user-service/v3/api-docs
-      - name: 👨‍🏫 MENTOR-SERVICE
+      - name: MENTOR-SERVICE
         url: /mentor-service/v3/api-docs
-      - name: 🛠️ SKILL-SERVICE
+      - name: SKILL-SERVICE
         url: /skill-service/v3/api-docs
-      - name: 📅 SESSION-SERVICE
+      - name: SESSION-SERVICE
         url: /session-service/v3/api-docs
-      - name: 👥 GROUP-SERVICE
+      - name: GROUP-SERVICE
         url: /group-service/v3/api-docs
-      - name: 🌟 REVIEW-SERVICE
+      - name: REVIEW-SERVICE
         url: /review-service/v3/api-docs
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
 
 jwt:
   secret: SkillSyncSecretKey2026XyzAbc123SuperSecure!@#
@@ -73,7 +130,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,gateway
+        include: health,info,metrics,gateway,prometheus
   endpoint:
     health:
       show-details: always
